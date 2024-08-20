@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Upload</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="image-container">
+            <!-- Updated Image Path to Correctly Load from Static Folder -->
+            <img th:src="@{/images/login.png}" alt="Background Image">
+        </div>
+        <div class="card">
+            <div class="card-header">
+                <h3>Upload Image</h3>
+            </div>
+            <div class="card-body">
+                <form action="/upload-image" method="POST" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label for="imageFile">Slider-1</label>
+                        <input type="file" class="form-control-file" id="imageFile" name="imageFile" accept="image/*" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="imageFile">Slider-2</label>
+                        <input type="file" class="form-control-file" id="imageFile" name="imageFile" accept="image/*" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="imageFile">Slider-3</label>
+                        <input type="file" class="form-control-file" id="imageFile" name="imageFile" accept="image/*" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="imageFile">Slider-4</label>
+                        <input type="file" class="form-control-file" id="imageFile" name="imageFile" accept="image/*" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="imageFile">Slider-5</label>
+                        <input type="file" class="form-control-file" id="imageFile" name="imageFile" accept="image/*" required>
+                    </div>
+                    <div class="d-flex justify-content-center">
+                        <button type="submit" class="btn btn-primary">Upload Image</button>
+                        <button type="reset" class="btn btn-danger" style="margin-left: 5px;">Reset</button>
+                    </div>
+                    
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

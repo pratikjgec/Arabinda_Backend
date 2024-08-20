@@ -19,6 +19,7 @@ public class Complain {
 	private String idCard;
 	private String complainDetails;
 	private String status;
+	private String otp;
 	
 	public int getId() {
 		return id;
@@ -63,6 +64,12 @@ public class Complain {
 	}
 	public void setStatus(String status) {
 		this.status = status;
+	}
+	public String getOtp() {
+		return otp;
+	}
+	public void setOtp(String otp) {
+		this.otp = otp;
 	}
 
 	

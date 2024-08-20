@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notice Box</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f8f9fa;
+        }
+        .container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            position: relative;
+        }
+        .image-container {
+            position: absolute;
+            right: 800px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 700px;
+            height: 700px;
+            overflow: hidden;
+            z-index: 0;
+        }
+        .image-container img {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+        }
+        .form-container {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            margin-left: 0px;
+            z-index: 1;
+            max-width: 600px;
+            height: 500px;
+            width: 100%;
+        }
+        .form-container .form-label {
+            font-weight: bold;
+        }
+        .form-container .form-control {
+            border-radius: 8px;
+            box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+        .form-container .btn {
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="image-container">
+        <!-- Updated Image Path to Correctly Load from Static Folder -->
+        <img src="notice.jpg" alt="Background Image">
+    </div>
+    <div class="form-container">
+        <h2 class="text-center">Publish Office Notice</h2>
+        <form id="complainForm" class="mt-4">
+            <div class="mb-3">
+                <label for="notice" class="form-label">Type your Notice</label>
+                <textarea class="form-control" id="notice" rows="10"></textarea>
+              </div>
+              <div class="d-flex justify-content-center">
+                <button type="submit" class="btn btn-primary mx-2">Update Notice</button>
+                <button type="reset" class="btn btn-danger mx-2">Clear</button>
+              </div>
+        </form>
+        <div id="responseMessage" class="mt-3"></div>
+    </div>
+</div>
+<script>
+    document.getElementById('complainForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent the form from submitting the traditional way
+
+        // Get form data
+        const notice = document.getElementById('notice').value;
+        
+        // API endpoint URL (replace with your actual API)
+        const apiUrl = 'http:localhost:8080/admin/updateNotice';
+
+        // Create the data object to send
+        const data = {
+            notice: notice,
+        };
+
+        // Send the data to the API
+        fetch(apiUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            // Handle success response
+            const responseMessage = document.getElementById('responseMessage');
+            responseMessage.innerHTML = `<div class="alert alert-success">Complain Registered successfully! ${data.name}.</div>`;
+        })
+        .catch(error => {
+            // Handle error response
+            const responseMessage = document.getElementById('responseMessage');
+            responseMessage.innerHTML = `<div class="alert alert-danger">Complain Registration failed: ${error.message}</div>`;
+        });
+    });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
