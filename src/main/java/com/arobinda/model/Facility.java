@@ -37,6 +37,8 @@ public class Facility {
 	private String newVoter;
 	private String ks_cc;
 	
+	
+	
 	public int getId() {
 		return id;
 	}

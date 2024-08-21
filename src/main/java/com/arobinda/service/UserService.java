@@ -21,7 +21,6 @@ import com.arobinda.repo.ContentRepo;
 import com.arobinda.repo.FacilityRepo;
 import com.arobinda.repo.UserRepo;
 
-import jakarta.transaction.Transactional;
 
 import com.arobinda.repo.NoticeRepo;
 import com.arobinda.repo.OtpRepo;
@@ -198,22 +197,37 @@ public class UserService {
 	        return(response.body().string());
 	}
 
-	@Transactional
-	public String surveyRegister(SurveyData surveyData) {
+	public String surveyRegister(SurveyData surveyData) throws Exception {
 		
 		
 		Facility facility=facilityRepo.save(surveyData.getFacility());
+	//	Facility facility=facilityRepo.save(null);
 		
 		List<PeopleSurvey> peopleList=surveyData.getPeopleSurvey();
 		
 		for (PeopleSurvey person : peopleList) {
 			person.setFacilityId(facility.getId());
 		}
-		
+
 		peopleSurveyRepo.saveAll(peopleList);
 		
 		
 		return "Survey Registration Sucessful..!!";
+	}
+
+	public List<PeopleSurvey> getAllFamilyHead() {
+		
+		return peopleSurveyRepo.findAllFamilyHead();
+	}
+
+	public SurveyData getSurveyData(int facility_id) {
+		
+		Facility facility=facilityRepo.findByFacilityId(facility_id);
+		List<PeopleSurvey> peopleList=peopleSurveyRepo.findAllByFacilityId(facility_id);
+		SurveyData surveyData=new SurveyData();
+		surveyData.setPeopleSurvey(peopleList);
+		surveyData.setPropleFacility(facility);
+		return surveyData;
 	}
 	
 	

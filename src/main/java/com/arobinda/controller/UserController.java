@@ -7,7 +7,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,10 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.arobinda.model.Complain;
 import com.arobinda.model.Content;
-import com.arobinda.model.Myuser;
 import com.arobinda.model.Notice;
+import com.arobinda.model.PeopleSurvey;
 import com.arobinda.model.SurveyData;
-import com.arobinda.repo.UserRepo;
 import com.arobinda.service.UserService;
 
 @RestController
@@ -30,9 +29,20 @@ public class UserController {
 	private UserService userService;
 
     @PostMapping("/surveyRegister")
-    public String surveyRegister(@RequestBody SurveyData surveyData) {
+    public String surveyRegister(@RequestBody SurveyData surveyData) throws Exception {
       
-        return  userService.surveyRegister(surveyData);
+        return userService.surveyRegister(surveyData);
+    }
+    
+    @GetMapping("/getAllFamilyHead")
+    public List<PeopleSurvey> getAllFamilyHead()  {
+      
+        return userService.getAllFamilyHead();
+    }
+    @GetMapping("/getSurveyData/{id}")
+    public SurveyData getSurveyData(@PathVariable("id") int facility_id)  {
+      
+        return userService.getSurveyData(facility_id);
     }
    
     @PostMapping("/complainRegister")
