@@ -17,16 +17,20 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.arobinda.model.Content;
 import com.arobinda.model.Myuser;
 import com.arobinda.model.Notice;
 import com.arobinda.model.Photo;
 import com.arobinda.repo.PhotoRepo;
 import com.arobinda.service.AdminService;
+import com.arobinda.service.UserService;
 import com.arobinda.service.UserService_temp;
 
 
@@ -39,10 +43,14 @@ import java.util.zip.Deflater;
 import java.util.zip.Inflater;
 
 @RestController()
+@RequestMapping("/admin")
 public class AdminController {
 	
 	@Autowired
 	private AdminService adminService;
+	
+	@Autowired
+	private UserService userService;
 	
    
 	   @Value("${photo.upload.path}")
@@ -58,32 +66,15 @@ public class AdminController {
 	        return adminService.registerUser(user);
 	        
 	    }
-	    @GetMapping("/dashboard")
-	    public String dashboard(Principal prin) {
-	       System.out.println(prin.getName());
-	        return "dashboard";
-	        
-	    }
+
 	    
-	    @GetMapping("admin/test")
+	    @GetMapping("/test")
 	    public String text() {
 	       
 	        return "after login admin test";
 	        
 	    }
-	    @PostMapping("user/test")
-	    public String usertest() {
-	       
-	        return "after login user test";
-	        
-	    }
-	    @GetMapping("user/request")
-	    public String request() {
-	       
-	        return "after login user request test";
-	        
-	    }
-	    
+
 	    @GetMapping("/users")
 	    public List<Myuser> getUsers() {
 	           
@@ -178,5 +169,32 @@ public class AdminController {
 		}
 		return outputStream.toByteArray();
 	}
+	
+    @PutMapping("/updateAboutUs")
+    public Optional<Content> updateAboutUs(@RequestBody Content content) {
+      
+        return  userService.updateAboutUs(content);
+    }
+    
+    @PostMapping("/publishAboutUs")
+    public ResponseEntity<String> publishAboutUs(@RequestBody Content content) {
+           
+            return userService.publishAboutUs(content);
+    }
+    
+    
+    @PutMapping("/noticeInactive")
+    public ResponseEntity<String> markNoticeInactive(@RequestBody Notice notice) {
+      
+        return  userService.markNoticeInactive(notice);
+    }
+    
+    
+    @PostMapping("/noticeSubmit")
+    public ResponseEntity<String> noticeSubmit(@RequestBody Notice notice) {
+           
+            return userService.noticeSubmit(notice);
+    }
+    
 
 }

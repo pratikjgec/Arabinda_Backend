@@ -130,7 +130,7 @@ public class UserService {
 		return null;
 	}
 
-	public ResponseEntity<String> uploadAboutUs(Content content) {
+	public ResponseEntity<String> publishAboutUs(Content content) {
 		
 			
 			if (contentRepo.findAll().isEmpty() &&!content.getAboutUs().isEmpty()) {
@@ -161,9 +161,6 @@ public class UserService {
 	}
 
 	public String generateOTP(Complain complain) throws IOException {
-			
-		
-	
 		
 			OkHttpClient client = new OkHttpClient();
 			String SENDER_ID="DLT_SENDER_ID";

@@ -27,7 +27,7 @@ public class SecurityConfiguration {
             .authorizeHttpRequests(registry -> {
                 // Allow access to static resources
                 registry.requestMatchers("/images/**", "/css/**", "/js/**").permitAll();
-                registry.requestMatchers("/home", "/register","/surveyRegister","/getAllFamilyHead","/getSurveyData/{id}","/health").permitAll();
+                registry.requestMatchers("/home","/complain","/health","/generateOTP","/complainRegister","/getAboutUs","/getNotice","/getcomplainByMobile").permitAll();
                 registry.requestMatchers("/admin/**").hasRole("ADMIN");
                 registry.requestMatchers("/user/**").hasRole("USER");
                 registry.anyRequest().authenticated();
