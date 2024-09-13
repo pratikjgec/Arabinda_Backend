@@ -1,6 +1,7 @@
 package com.arobinda.service;
 
 import java.security.SecureRandom;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 import com.arobinda.model.Myuser;
 import com.arobinda.repo.AdminRepo;
 
+
 @Service
 public class AdminService {
 	
@@ -29,22 +31,29 @@ public class AdminService {
 	 @Autowired
 	 private PasswordEncoder passwordEncoder;
 
-	public ResponseEntity<String> registerUser(Myuser user) {
+
+	public String registerUser(Myuser user) {
 		
 		 if (adminRepo.findByUserName(user.getUserName()).isPresent()) {
-	            return ResponseEntity.badRequest().body("User is already exist");
+	            return "User is already exist";
 	       }
 
 		 user.setPassword(passwordEncoder.encode(user.getPassword()));
 		 adminRepo.save(user);
 		 
-		 return ResponseEntity.ok("User registered successfully");
+		 return "User registered successfully";
 		 
 		
 	}
 
 	public List<Myuser> getUsers() {
-		return adminRepo.findAll();
+		
+		List<Myuser> userDeatils=new ArrayList<>();
+		userDeatils=adminRepo.findAll();
+		for(Myuser userObj:userDeatils) {
+			userObj.setPassword(null);
+		}
+		return userDeatils;
 	}
 
 	public ResponseEntity<String> login(Myuser user) {

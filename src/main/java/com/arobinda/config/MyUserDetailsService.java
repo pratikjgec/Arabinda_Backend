@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 import com.arobinda.model.Myuser;
 import com.arobinda.repo.AdminRepo;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class MyUserDetailsService implements UserDetailsService{
 

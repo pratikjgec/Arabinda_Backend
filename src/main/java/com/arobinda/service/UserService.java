@@ -2,13 +2,17 @@ package com.arobinda.service;
 
 import java.io.IOException;
 import java.security.SecureRandom;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import com.arobinda.model.Complain;
 import com.arobinda.model.Content;
@@ -49,68 +53,94 @@ public class UserService {
 	private PeopleSurveyRepo peopleSurveyRepo;
 	
 	@Value("${fast2sms_API_KEY}")
-	private  String  API_KEY;
+	private String  API_KEY;
 
 
-	public ResponseEntity<String> complainRegister(Complain complain) {
+	public ResponseEntity<?> complainRegister(Complain complain) throws IOException {
 	
 		Optional<Otp> otpDetails=otpRepo.findByMobile(complain.getMobile());
-		
+		Map<String, Object> response = new HashMap<>();
+       
+       
 		 if (!otpDetails.isEmpty() && complain.getOtp().equalsIgnoreCase(otpDetails.get().getOtp())) {
 			 
 			 Optional<Complain> complainDetails=userRepo.findByMobile(complain.getMobile());
 			 if(!complainDetails.isEmpty() && complainDetails.get().getStatus().equalsIgnoreCase("unresolved")) {
 				 
 				 otpRepo.delete(otpDetails.get());
-				 return ResponseEntity.ok("Complain Already Registered Kindly use different Phone no!!!");
+				 response.put("status", "failed");
+				 response.put("message", "Complain Already Registered Kindly use different Phone no!!!");
+				 return new ResponseEntity<>(response,HttpStatus.OK);
 			 }
 			 else {
 				 complain.setOtp("");
+				 SecureRandom secureRandom = new SecureRandom();
+			     int complainId = 1000 + secureRandom.nextInt(9000);
+			     complain.setComplain_id(String.valueOf(complainId));
 				 userRepo.save(complain);
 				 otpRepo.delete(otpDetails.get());
-				 return ResponseEntity.ok("Complain registered successfully!!!");
+				 
+			//	 String smsResp=smsSend(complain.getMobile(),complainId,"ComplainRegister");
+				 response.put("status", "success");
+				 response.put("message", "Complain Id-"+complainId+" Complain registered successfully!!!");
+			//	 response.put("sms_response", smsResp);
+				 return new ResponseEntity<>(response,HttpStatus.OK);
 			 }
 		}
 		else {
-			 return ResponseEntity.badRequest().body("Entered OTP is not valid!!!");
+			response.put("status", "failed");
+			response.put("message", "Entered OTP is not valid!!!");
+			 return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
 		 }
 	}
 
-	public List<Complain> getComplain(Complain complain) {
+
+
+	public List<Complain> getAllcomplain() {
 		
-		return userRepo.findByStatus(complain.getStatus());
+		return userRepo.findAll();
 	}
 	
-	public Optional<Complain> getComplainByMobile(Complain complain) {
+	public Optional<Complain> getComplainByComplainId(String complainId) {
 		
-		Optional<Complain> complainDetails=userRepo.findByMobile(complain.getMobile());
-	    if(complainDetails!=null) {
+		Optional<Complain> complainDetails=userRepo.findByComplainId(complainId);
+		
+	    if(complainDetails.isPresent()) {
 	    	
 	    	return complainDetails;
         }
 	    return null;
 	}
 
-	public ResponseEntity<String> markComplainResolved(Complain complain) {
-		
+	public ResponseEntity<?> markComplainResolved(Complain complain) throws IOException {
+		Map<String, Object> response = new HashMap<>();
 		Optional<Complain> complainDetails=userRepo.findByMobile(complain.getMobile());
+		String complainId=complain.getComplain_id();
 		 if (complainDetails!=null) {
 			 
 			 Complain complainData=complainDetails.get();
 			 complainData.setStatus(complain.getStatus());
 			 userRepo.save(complainData);
-			 return ResponseEntity.ok("Complain Resolved!!");
+		//	 String smsResp=smsSend(complain.getMobile(),complainId,"ComplainResolved");
+			 response.put("status", "success");
+			 response.put("message", "Complain Id-"+complainId+" resolved successfully!!!");
+		//	 response.put("sms_response", smsResp);
+			 return new ResponseEntity<>(response,HttpStatus.OK);
+			 
 		 }
-	         return ResponseEntity.badRequest().body("Complain not found!!");
+		 response.put("status", "failed");
+		 response.put("message", "Complain Id-"+complainId+" not found!!");
+		 
+		 return new ResponseEntity<>(response,HttpStatus.NOT_FOUND);
 	}
 
-	public ResponseEntity<String> noticeSubmit(Notice notice) {
+	public String noticeSubmit(Notice notice) {
 		
 		if (!notice.getNotice().isEmpty()) {
 			
 			noticeRepo.save(notice);
 		}
-		 return ResponseEntity.ok("Notice Uploaded successfully");
+		 return "Notice Uploaded successfully";
 	}
 
 	public List<Notice> getNotice() {
@@ -120,14 +150,15 @@ public class UserService {
 		return notices;
 	}
 
-	public ResponseEntity<String> markNoticeInactive(Notice notice) {
+	public String markNoticeInactive(Notice notice) {
 		
 		Optional<Notice> noticeDetails=noticeRepo.findById(notice.getId());
 		if(noticeDetails!=null) {
 			notice.setIsActive(0);
-			noticeRepo.save(notice);
+			 noticeRepo.save(notice);
+			return "Notice Mark in-acitive successfully";
 		}
-		return null;
+		return  "No Notice Found, notice id may incorrect";
 	}
 
 	public ResponseEntity<String> publishAboutUs(Content content) {
@@ -171,7 +202,8 @@ public class UserService {
 			String recipient=complain.getMobile();
 			//String API_KEY="EezvjH6bTcNlrPDXa42gkB38n5osyK17JwQfFRVMtSiLdpZ0UO30Au2Z57nmcCeoYGIMUD1TQ8FaBWqr";
 	        MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");
-	        RequestBody body = RequestBody.create(mediaType, 
+	        @SuppressWarnings("deprecation")
+			RequestBody body = RequestBody.create(mediaType, 
 	            "sender_id=" + SENDER_ID + 
 	            "&message=" + message + 
 	            "&language=english&route=p&numbers=" + recipient);
@@ -191,6 +223,7 @@ public class UserService {
 	        otpRepo.save(otp);
 	        
 	        Response response = client.newCall(request).execute();
+	        
 	        return(response.body().string());
 	}
 
@@ -209,7 +242,7 @@ public class UserService {
 		peopleSurveyRepo.saveAll(peopleList);
 		
 		
-		return "Survey Registration Sucessful..!!";
+		return "Survey Registration Sucessfull !!";
 	}
 
 	public List<PeopleSurvey> getAllFamilyHead() {
@@ -225,6 +258,68 @@ public class UserService {
 		surveyData.setPeopleSurvey(peopleList);
 		surveyData.setPropleFacility(facility);
 		return surveyData;
+	}
+	
+	@SuppressWarnings("deprecation")
+	private  String smsSend(String mobile, int complainId, String type) throws IOException {
+		
+		OkHttpClient client = new OkHttpClient();
+		String SENDER_ID="DLT_SENDER_ID";
+		RequestBody body=null;
+		String SMS_URL = "https://www.fast2sms.com/dev/bulkV2";
+		String API_KEY_NEW="";
+		String name="Potu";
+		int full=15000;
+		int due=13000;
+		int paid=2000;
+		
+		RestTemplate restTemplate = new RestTemplate();
+		if(type.equalsIgnoreCase("ComplainRegister")) {
+//			String message="12345"; // Registered template ID as per fast2sms
+//	        MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");
+//	         body = RequestBody.create(mediaType, 
+//	            "sender_id=" + SENDER_ID + 
+//	            "&message=" + message + 
+//	            "&language=english&route=p&numbers=" + mobile);
+			 String variablesValues = String.format("%s|%s|%s|%s", name, paid, full, due);
+			 String url = SMS_URL+ "?authorization=" + API_KEY_NEW
+			            + "&route=dlt" 
+			            + "&sender_id=nabrun"
+			            + "&message=173080"
+			            + "&variables_values="+variablesValues
+			            + "&numbers="+mobile
+			            + "&flash=0";
+			 
+			
+			 ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
+
+		        // Return the response from the API
+		        return response.getBody();
+			
+		}
+		
+		if(type.equalsIgnoreCase("ComplainResolved")) {
+			String message="12345"; // Registered template ID as per fast2sms
+	        MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");
+	         body = RequestBody.create(mediaType, 
+	            "sender_id=" + SENDER_ID + 
+	            "&message=" + message + 
+	            "&language=english&route=p&numbers=" + mobile);
+		}
+
+
+
+	     Request request = new Request.Builder()
+	             .url("https://www.fast2sms.com/dev/bulkV2")
+	             .post(body)
+	             .addHeader("authorization", API_KEY)
+	             .addHeader("cache-control", "no-cache")
+	             .addHeader("content-type", "application/x-www-form-urlencoded")
+	             .build();
+	     Response response = client.newCall(request).execute();
+	     
+	     return(response.body().string());
+		
 	}
 	
 	

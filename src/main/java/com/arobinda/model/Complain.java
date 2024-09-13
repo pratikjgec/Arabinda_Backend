@@ -16,9 +16,10 @@ public class Complain {
 	private String name;
 	private String address;
 	private String mobile;
-	private String idCard;
-	private String complainDetails;
+	private String id_card;
+	private String complain_details;
 	private String status;
+	private String complain_id;
 	private String otp;
 	
 	public int getId() {
@@ -45,20 +46,28 @@ public class Complain {
 	public void setMobile(String mobile) {
 		this.mobile = mobile;
 	}
-	public String getIdCard() {
-		return idCard;
-	}
-	public void setIdCard(String idCard) {
-		this.idCard = idCard;
-	}
-	public String getComplainDetails() {
-		return complainDetails;
-	}
-	public void setComplainDetails(String complainDetails) {
-		this.complainDetails = complainDetails;
-	}
+
 	
 	
+	
+	public String getComplain_id() {
+		return complain_id;
+	}
+	public void setComplain_id(String complain_id) {
+		this.complain_id = complain_id;
+	}
+	public String getId_card() {
+		return id_card;
+	}
+	public void setId_card(String id_card) {
+		this.id_card = id_card;
+	}
+	public String getComplain_details() {
+		return complain_details;
+	}
+	public void setComplain_details(String complain_details) {
+		this.complain_details = complain_details;
+	}
 	public String getStatus() {
 		return status;
 	}

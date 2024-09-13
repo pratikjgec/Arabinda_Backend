@@ -14,7 +14,7 @@ public class Myuser {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	private String fullName;
+	private String full_name;
 	private String userName;
 	private String password;
 	private String role;
@@ -27,10 +27,10 @@ public class Myuser {
 		this.id = id;
 	}
 	public String getFullname() {
-		return fullName;
+		return full_name;
 	}
 	public void setFullname(String fullname) {
-		this.fullName = fullname;
+		this.full_name = fullname;
 	}
 	public String getUserName() {
 		return userName;
@@ -50,12 +50,7 @@ public class Myuser {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	public String getFullName() {
-		return fullName;
-	}
-	public void setFullName(String fullName) {
-		this.fullName = fullName;
-	}
+
 	public String getRole() {
 		return role;
 	}

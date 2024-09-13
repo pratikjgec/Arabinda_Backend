@@ -13,7 +13,7 @@ public class PeopleSurvey {
 	private int id;
 	private String fullName;
 	private String fatherName;
-	private int familyHead=0;
+	private int family_head=0;
 	private String relationwithHO;
 	private String sex;
 	private String dob;
@@ -103,12 +103,13 @@ public class PeopleSurvey {
 	public void setFacilityId(int facilityId) {
 		this.facilityId = facilityId;
 	}
-	public int getFamilyHead() {
-		return familyHead;
+	public int getFamily_head() {
+		return family_head;
 	}
-	public void setFamilyHead(int familyHead) {
-		this.familyHead = familyHead;
+	public void setFamily_head(int family_head) {
+		this.family_head = family_head;
 	}
+
 
 	
 }

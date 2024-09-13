@@ -12,10 +12,10 @@ import com.arobinda.model.PeopleSurvey;
 @Repository
 public interface PeopleSurveyRepo extends JpaRepository<PeopleSurvey, Integer>{
 
-	@Query(value = "SELECT * FROM people_survey WHERE familyHead = 1", nativeQuery = true)
+	@Query(value = "SELECT * FROM people_survey WHERE family_head = 1;", nativeQuery = true)
 	List<PeopleSurvey> findAllFamilyHead();
 	
-	@Query(value = "SELECT * FROM people_survey where facility_id=:facility_id", nativeQuery = true)
+	@Query(value = "SELECT * FROM people_survey where facility_id=:facility_id;", nativeQuery = true)
 	List<PeopleSurvey> findAllByFacilityId(@Param("facility_id") int facility_id);
 	
 	

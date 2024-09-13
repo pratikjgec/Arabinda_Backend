@@ -1,10 +1,13 @@
 package com.arobinda.controller;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,37 +37,54 @@ public class UserController {
     public String test() {
         return "after login user request test";
     }
-
+	
     @PostMapping("/surveyRegister")
-    public String surveyRegister(@RequestBody SurveyData surveyData) throws Exception {
+    public ResponseEntity<?> surveyRegister(@RequestBody SurveyData surveyData) throws Exception {
       
-        return userService.surveyRegister(surveyData);
+    	 Map<String, Object> response = new HashMap<>();
+         response.put("status", "success");
+         response.put("message", userService.surveyRegister(surveyData));
+         return new ResponseEntity<>(response, HttpStatus.OK);
     }
-    
+
     @GetMapping("/getAllFamilyHead")
-    public List<PeopleSurvey> getAllFamilyHead()  {
+    public ResponseEntity<?> getAllFamilyHead()  {
       
-        return userService.getAllFamilyHead();
+    	Map<String, Object> response = new HashMap<>();
+        response.put("status", "success");
+        response.put("data", userService.getAllFamilyHead());
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
     @GetMapping("/getSurveyData/{id}")
-    public SurveyData getSurveyData(@PathVariable("id") int facility_id)  {
+    public ResponseEntity<?> getSurveyData(@PathVariable("id") int facility_id)  {
       
-        return userService.getSurveyData(facility_id);
+    	Map<String, Object> response = new HashMap<>();
+        response.put("status", "success");
+        response.put("data", userService.getSurveyData(facility_id));
+        return new ResponseEntity<>(response, HttpStatus.OK);
+       
     }
    
 
     
-    @PostMapping("/getcomplain")
-    public List<Complain> getcomplain(@RequestBody Complain complain) {
+    @PostMapping("/getAllcomplain")
+    public ResponseEntity<?> getAllcomplain() {
            
-            return userService.getComplain(complain);
+    	Map<String, Object> response = new HashMap<>();
+        response.put("status", "success");
+        response.put("data", userService.getAllcomplain());
+        return new ResponseEntity<>(response, HttpStatus.OK);
+         
     }
 
     
     @PutMapping("/complainResolved")
-    public ResponseEntity<String> markComplainResolved(@RequestBody Complain complain) {
+    public ResponseEntity<?> markComplainResolved(@RequestBody Complain complain) throws IOException {
       
-        return  userService.markComplainResolved(complain);
+    	Map<String, Object> response = new HashMap<>();
+        response.put("status", "success");
+        response.put("message", userService.markComplainResolved(complain));
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     

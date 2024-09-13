@@ -35,7 +35,9 @@ import com.arobinda.service.UserService_temp;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.zip.DataFormatException;
@@ -61,10 +63,13 @@ public class AdminController {
 
 	    
 	    @PostMapping("/register")
-	    public ResponseEntity<String> registerUser(@RequestBody Myuser user) {
+	    public ResponseEntity<?> registerUser(@RequestBody Myuser user) {
 	       
-	        return adminService.registerUser(user);
-	        
+	    	 Map<String, Object> response = new HashMap<>();
+	          response.put("status", "success");
+	          response.put("message", adminService.registerUser(user));
+	          return new ResponseEntity<>(response, HttpStatus.OK);
+	    	
 	    }
 
 	    
@@ -76,9 +81,12 @@ public class AdminController {
 	    }
 
 	    @GetMapping("/users")
-	    public List<Myuser> getUsers() {
+	    public ResponseEntity<?> getUsers() {
 	           
-	            return adminService.getUsers();
+	    	Map<String, Object> response = new HashMap<>();
+	          response.put("status", "success");
+	          response.put("message", adminService.getUsers());
+	          return new ResponseEntity<>(response, HttpStatus.OK);
 	    }
 	    
 //    
@@ -171,29 +179,42 @@ public class AdminController {
 	}
 	
     @PutMapping("/updateAboutUs")
-    public Optional<Content> updateAboutUs(@RequestBody Content content) {
+    public ResponseEntity<?> updateAboutUs(@RequestBody Content content) {
       
-        return  userService.updateAboutUs(content);
+    	Map<String, Object> response = new HashMap<>();
+        response.put("status", "success");
+        response.put("message", "About us updated successfully");
+        response.put("data", userService.updateAboutUs(content));
+        return new ResponseEntity<>(response, HttpStatus.OK);
+          
     }
     
     @PostMapping("/publishAboutUs")
-    public ResponseEntity<String> publishAboutUs(@RequestBody Content content) {
+    public ResponseEntity<?> publishAboutUs(@RequestBody Content content) {
            
-            return userService.publishAboutUs(content);
+    	Map<String, Object> response = new HashMap<>();
+        response.put("status", "success");
+        response.put("message", userService.publishAboutUs(content));
+        return new ResponseEntity<>(response, HttpStatus.OK);
+            
     }
-    
     
     @PutMapping("/noticeInactive")
-    public ResponseEntity<String> markNoticeInactive(@RequestBody Notice notice) {
+    public ResponseEntity<?> markNoticeInactive(@RequestBody Notice notice) {
       
-        return  userService.markNoticeInactive(notice);
+    	Map<String, Object> response = new HashMap<>();
+        response.put("status", "success");
+        response.put("message", userService.markNoticeInactive(notice));
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
     
-    
     @PostMapping("/noticeSubmit")
-    public ResponseEntity<String> noticeSubmit(@RequestBody Notice notice) {
+    public ResponseEntity<?> noticeSubmit(@RequestBody Notice notice) {
            
-            return userService.noticeSubmit(notice);
+    	Map<String, Object> response = new HashMap<>();
+        response.put("status", "success");
+        response.put("message", userService.noticeSubmit(notice));
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
     
 
