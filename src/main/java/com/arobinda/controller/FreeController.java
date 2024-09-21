@@ -1,10 +1,8 @@
 package com.arobinda.controller;
-
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,13 +10,10 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.arobinda.config.MyUserDetailsService;
 import com.arobinda.model.Complain;
 import com.arobinda.model.Myuser;
@@ -29,7 +24,6 @@ import com.arobinda.webtoken.LoginForm;
 
 @RestController
 public class FreeController {
-	
 	
 	@Autowired
 	private UserService userService;
@@ -119,14 +113,14 @@ public class FreeController {
 	            Map<String, Object> response = new HashMap<>();
                 response.put("status", "failed");
                 response.put("message", "Invalid Username/Password!!!");
-                return new ResponseEntity<>(response, HttpStatus.OK);
+                return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
 	        }
     	}
     	catch (AuthenticationException e) {
             Map<String, Object> response = new HashMap<>();
             response.put("status", "failed");
             response.put("message", "Invalid Username/Password!!!");
-            return new ResponseEntity<>(response, HttpStatus.OK);
+            return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
         }
     }
     

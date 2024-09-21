@@ -61,7 +61,7 @@ public class UserService {
 		Optional<Otp> otpDetails=otpRepo.findByMobile(complain.getMobile());
 		Map<String, Object> response = new HashMap<>();
        
-       
+			
 		 if (!otpDetails.isEmpty() && complain.getOtp().equalsIgnoreCase(otpDetails.get().getOtp())) {
 			 
 			 Optional<Complain> complainDetails=userRepo.findByMobile(complain.getMobile());
@@ -191,7 +191,7 @@ public class UserService {
 		return aboutUs;
 	}
 
-	public String generateOTP(Complain complain) throws IOException {
+	public String generateFreeOTP(Complain complain) throws IOException {
 		
 			OkHttpClient client = new OkHttpClient();
 			String SENDER_ID="DLT_SENDER_ID";
@@ -215,7 +215,7 @@ public class UserService {
 	            .addHeader("cache-control", "no-cache")
 	            .addHeader("content-type", "application/x-www-form-urlencoded")
 	            .build();
-
+	
 			
 	        Otp otp=new Otp();
 	        otp.setMobile(recipient);
@@ -321,7 +321,40 @@ public class UserService {
 	     return(response.body().string());
 		
 	}
-	
-	
 
+	public String generateOTP(Complain complain) {
+		
+		String SENDER_ID="NSCOP";
+		String route="dlt";
+		String message_id="173486";
+		String recipent=complain.getMobile();
+		SecureRandom secureRandom = new SecureRandom();
+		int randomOTPNo= 1000 + secureRandom.nextInt(9000);
+		
+		 String variablesValues = String.format("%s|", randomOTPNo);
+		
+		String SMS_URL = "https://www.fast2sms.com/dev/bulkV2";
+		
+		RestTemplate restTemplate = new RestTemplate();
+		
+			 String url = SMS_URL+ "?authorization=" + API_KEY
+			            + "&route="+route 
+			            + "&sender_id="+SENDER_ID
+			            + "&message="+message_id
+			            + "&variables_values="+variablesValues
+			            + "&numbers="+recipent
+			            + "&flash=0";
+			
+	   ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
+
+			   Otp otp=new Otp();
+		       otp.setMobile(recipent);
+		       otp.setOtp(String.valueOf(randomOTPNo));
+		       System.out.println(otp.getOtp());
+		       System.out.println(otp.getMobile());
+		       otpRepo.save(otp);
+		       
+		return response.getBody();
+
+	}
 }

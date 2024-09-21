@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -14,7 +13,9 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -33,7 +34,8 @@ public class SecurityConfiguration {
     private JwtAuthenticationFilter jwtAuthenticationFilter;
     
     @Bean
-     SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+     SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity,AuthenticationEntryPoint authenticationEntryPoint,
+             AccessDeniedHandler accessDeniedHandler) throws Exception {
 
         return httpSecurity
         	.cors(cors -> cors.configurationSource(corsConfigurationSource()))  // Enable CORS
@@ -47,8 +49,23 @@ public class SecurityConfiguration {
                 registry.anyRequest().authenticated();
             })
             .formLogin(AbstractAuthenticationFilterConfigurer::disable)
+            .exceptionHandling(exceptionHandling -> {
+                // Custom handlers for 401 Unauthorized and 403 Forbidden errors
+                exceptionHandling.authenticationEntryPoint(authenticationEntryPoint);
+                exceptionHandling.accessDeniedHandler(accessDeniedHandler);
+            })
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
             .build();
+    }
+    
+    @Bean
+    public CustomAuthenticationEntryPoint authenticationEntryPoint() {
+        return new CustomAuthenticationEntryPoint();
+    }
+
+    @Bean
+    public CustomAccessDeniedHandler accessDeniedHandler() {
+        return new CustomAccessDeniedHandler();
     }
 
     @Bean

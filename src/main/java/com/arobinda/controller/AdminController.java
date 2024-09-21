@@ -1,20 +1,11 @@
 package com.arobinda.controller;
-
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.nio.file.Paths;
-import java.security.Principal;
-import java.nio.file.Path;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.ResponseEntity.BodyBuilder;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-
 import com.arobinda.model.Content;
 import com.arobinda.model.Myuser;
 import com.arobinda.model.Notice;
@@ -32,15 +22,9 @@ import com.arobinda.model.Photo;
 import com.arobinda.repo.PhotoRepo;
 import com.arobinda.service.AdminService;
 import com.arobinda.service.UserService;
-import com.arobinda.service.UserService_temp;
-
-
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import java.util.zip.DataFormatException;
 import java.util.zip.Deflater;
 import java.util.zip.Inflater;
@@ -51,17 +35,12 @@ public class AdminController {
 	
 	@Autowired
 	private AdminService adminService;
-	
 	@Autowired
 	private UserService userService;
-	
-   
-	   @Value("${photo.upload.path}")
-	    private  String storageDir; 
-	    
-	    @Autowired 
-	    private PhotoRepo photoRepo;
-
+    @Autowired 
+    private PhotoRepo photoRepo;
+	@Value("${photo.upload.path}")
+	private  String storageDir; 
 	    
 	    @PostMapping("/register")
 	    public ResponseEntity<?> registerUser(@RequestBody Myuser user) {
@@ -72,8 +51,6 @@ public class AdminController {
 	          return new ResponseEntity<>(response, HttpStatus.OK);
 	    	
 	    }
-
-	    
 	    @GetMapping("/test")
 	    public String text() {
 	       
@@ -89,37 +66,6 @@ public class AdminController {
 	          response.put("message", adminService.getUsers());
 	          return new ResponseEntity<>(response, HttpStatus.OK);
 	    }
-	    
-//    
-//    @PostMapping("/sliderPhotoUpload")
-//    public ResponseEntity<String> sliderPhotoUpload(@RequestParam("file1") MultipartFile file1,
-//    		@RequestParam("file2") MultipartFile file2,
-//    		@RequestParam("file3") MultipartFile file3,
-//    		@RequestParam("file4") MultipartFile file4,
-//    		@RequestParam("file5") MultipartFile file5) throws IOException {
-//           
-//    	
-//    	if(file1.isEmpty()||file2.isEmpty()||file3.isEmpty()||file4.isEmpty()||file5.isEmpty()) {
-//    		return ResponseEntity.badRequest().body("Selected files are incorrect/ wrong file");
-//    	}
-//    	List<MultipartFile> photoList=new ArrayList<>();
-//    	photoList.add(file1);
-//    	photoList.add(file2);
-//    	photoList.add(file3);
-//    	photoList.add(file4);
-//    	photoList.add(file5);
-//    	
-//    	
-//    
-//    	String response=adminService.sliderPhotoUpload(photoList);
-//    	if(response!=null) {
-//    	return ResponseEntity.ok().body("Slider Photos Uploaded succesfully");
-//    	}
-//    	
-//    	return ResponseEntity.badRequest().body("Slider Photos Uploaded succesfully");
-//           
-//    }
-    
     
     @PostMapping("/upload")
 	public BodyBuilder uplaodImage(@RequestParam("imageFile") MultipartFile file) throws IOException {
@@ -217,6 +163,4 @@ public class AdminController {
         response.put("message", userService.noticeSubmit(notice));
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
-    
-
 }
