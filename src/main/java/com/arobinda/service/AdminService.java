@@ -37,7 +37,7 @@ public class AdminService {
 		 if (adminRepo.findByUserName(user.getUserName()).isPresent()) {
 	            return "User is already exist";
 	       }
-
+		 	System.out.println(user.toString());
 		 user.setPassword(passwordEncoder.encode(user.getPassword()));
 		 adminRepo.save(user);
 		 

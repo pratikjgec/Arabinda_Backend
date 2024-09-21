@@ -16,6 +16,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.arobinda.webtoken.JwtAuthenticationFilter;
 
@@ -33,6 +36,7 @@ public class SecurityConfiguration {
      SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
 
         return httpSecurity
+        	.cors(cors -> cors.configurationSource(corsConfigurationSource()))  // Enable CORS
             .csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(registry -> {
                 // Allow access to static resources
@@ -47,6 +51,18 @@ public class SecurityConfiguration {
             .build();
     }
 
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowCredentials(true);  // Allow credentials like cookies
+        configuration.addAllowedOriginPattern("*");  // Allow all origins (use addAllowedOrigin() for specific origins)
+        configuration.addAllowedHeader("*");  // Allow all headers
+        configuration.addAllowedMethod("*");  // Allow all HTTP methods (GET, POST, etc.)
+        
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);  // Apply CORS settings to all endpoints
+        return source;
+    }
     
     @Bean
      AuthenticationManager authenticationManager() {

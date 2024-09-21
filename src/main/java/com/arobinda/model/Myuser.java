@@ -19,18 +19,17 @@ public class Myuser {
 	private String password;
 	private String role;
 	private int active=1;
-	
 	public int getId() {
 		return id;
 	}
 	public void setId(int id) {
 		this.id = id;
 	}
-	public String getFullname() {
+	public String getFull_name() {
 		return full_name;
 	}
-	public void setFullname(String fullname) {
-		this.full_name = fullname;
+	public void setFull_name(String full_name) {
+		this.full_name = full_name;
 	}
 	public String getUserName() {
 		return userName;
@@ -38,19 +37,12 @@ public class Myuser {
 	public void setUserName(String userName) {
 		this.userName = userName;
 	}
-//	public String getEmail() {
-//		return email;
-//	}
-//	public void setEmail(String email) {
-//		this.email = email;
-//	}
 	public String getPassword() {
 		return password;
 	}
 	public void setPassword(String password) {
 		this.password = password;
 	}
-
 	public String getRole() {
 		return role;
 	}
@@ -63,5 +55,12 @@ public class Myuser {
 	public void setActive(int active) {
 		this.active = active;
 	}
+	@Override
+	public String toString() {
+		return "Myuser [id=" + id + ", full_name=" + full_name + ", userName=" + userName + ", password=" + password
+				+ ", role=" + role + ", active=" + active + "]";
+	}
+	
+	
 	
 }

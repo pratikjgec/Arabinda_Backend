@@ -12,6 +12,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -108,8 +109,8 @@ public class FreeController {
 	                Map<String, Object> response = new HashMap<>();
 	                response.put("status", "success");
 	                response.put("message", "Token Created successfully");
-	                response.put("username", user.get().getFullname());
-	                
+	                response.put("full_name", user.get().getFull_name());
+	                response.put("role",user.get().getRole() );
 	                response.put("token", token);
 	                return new ResponseEntity<>(response, HttpStatus.OK);
 	            
