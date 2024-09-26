@@ -18,8 +18,6 @@ import org.springframework.web.multipart.MultipartFile;
 import com.arobinda.model.Content;
 import com.arobinda.model.Myuser;
 import com.arobinda.model.Notice;
-import com.arobinda.model.Photo;
-import com.arobinda.repo.PhotoRepo;
 import com.arobinda.service.AdminService;
 import com.arobinda.service.UserService;
 import java.util.HashMap;
@@ -37,8 +35,7 @@ public class AdminController {
 	private AdminService adminService;
 	@Autowired
 	private UserService userService;
-    @Autowired 
-    private PhotoRepo photoRepo;
+
 	@Value("${photo.upload.path}")
 	private  String storageDir; 
 	    
@@ -66,25 +63,7 @@ public class AdminController {
 	          response.put("message", adminService.getUsers());
 	          return new ResponseEntity<>(response, HttpStatus.OK);
 	    }
-    
-    @PostMapping("/upload")
-	public BodyBuilder uplaodImage(@RequestParam("imageFile") MultipartFile file) throws IOException {
-
-		System.out.println("Original Image Byte Size - " + file.getBytes().length);
-		Photo img = new Photo(file.getOriginalFilename(), file.getContentType(),
-				compressBytes(file.getBytes()));
-		photoRepo.save(img);
-		return ResponseEntity.status(HttpStatus.OK);
-	}
-
-	@GetMapping(path = { "/get/{imageName}" })
-	public Photo getImage(@PathVariable("imageName") String imageName) throws IOException {
-
-		final Optional<Photo> retrievedImage = photoRepo.findByName(imageName);
-		Photo img = new Photo(retrievedImage.get().getName(), retrievedImage.get().getType(),
-				decompressBytes(retrievedImage.get().getPicByte()));
-		return img;
-	}
+   
 
 	// compress the image bytes before storing it in the database
 	public static byte[] compressBytes(byte[] data) {

@@ -2,6 +2,8 @@ package com.arobinda.service;
 
 import java.io.IOException;
 import java.security.SecureRandom;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -56,6 +58,11 @@ public class UserService {
 	private String  API_KEY;
 
 
+
+    SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");  
+    Date date = new Date();  
+    String systemDate=formatter.format(date); 
+	
 	public ResponseEntity<?> complainRegister(Complain complain) throws IOException {
 	
 		Optional<Otp> otpDetails=otpRepo.findByMobile(complain.getMobile());
@@ -77,6 +84,7 @@ public class UserService {
 				 SecureRandom secureRandom = new SecureRandom();
 			     int complainId = 1000 + secureRandom.nextInt(9000);
 			     complain.setComplain_id(String.valueOf(complainId));
+			     complain.setCreated_date(systemDate);
 				 userRepo.save(complain);
 				 otpRepo.delete(otpDetails.get());
 				 
@@ -137,7 +145,7 @@ public class UserService {
 	public String noticeSubmit(Notice notice) {
 		
 		if (!notice.getNotice().isEmpty()) {
-			
+			notice.setCreated_date(systemDate);
 			noticeRepo.save(notice);
 		}
 		 return "Notice Uploaded successfully";
@@ -154,7 +162,7 @@ public class UserService {
 		
 		Optional<Notice> noticeDetails=noticeRepo.findById(notice.getId());
 		if(noticeDetails!=null) {
-			notice.setIsActive(0);
+			notice.setIs_active(0);
 			 noticeRepo.save(notice);
 			return "Notice Mark in-acitive successfully";
 		}
@@ -164,7 +172,7 @@ public class UserService {
 	public ResponseEntity<String> publishAboutUs(Content content) {
 		
 			
-			if (contentRepo.findAll().isEmpty() &&!content.getAboutUs().isEmpty()) {
+			if (contentRepo.findAll().isEmpty() &&!content.getAbout_us().isEmpty()) {
 				
 				contentRepo.save(content);
 				 return ResponseEntity.ok("About Us Content Uploaded successfully");
@@ -183,9 +191,9 @@ public class UserService {
 	public Optional<Content> updateAboutUs(Content content) {
 		
 		Optional<Content> aboutUs=contentRepo.findById(content.getId());
-		if(aboutUs!=null && !content.getAboutUs().isEmpty()) {
+		if(aboutUs!=null && !content.getAbout_us().isEmpty()) {
 			
-			aboutUs.get().setAboutUs(content.getAboutUs());
+			aboutUs.get().setAbout_us(content.getAbout_us());
 			contentRepo.save(aboutUs.get());
 		}
 		return aboutUs;
@@ -230,13 +238,18 @@ public class UserService {
 	public String surveyRegister(SurveyData surveyData) throws Exception {
 		
 		
+		surveyData.getFacility().setCreated_date(systemDate);
+		surveyData.getFacility().setModified_date(systemDate);
 		Facility facility=facilityRepo.save(surveyData.getFacility());
 	//	Facility facility=facilityRepo.save(null);
 		
 		List<PeopleSurvey> peopleList=surveyData.getPeopleSurvey();
 		
 		for (PeopleSurvey person : peopleList) {
-			person.setFacilityId(facility.getId());
+			
+			person.setCreated_date(systemDate);
+			person.setModified_date(systemDate);
+			person.setFacility_id(facility.getId());
 		}
 
 		peopleSurveyRepo.saveAll(peopleList);

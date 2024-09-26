@@ -1,5 +1,7 @@
 package com.arobinda.model;
 
+import java.util.Date;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -11,43 +13,53 @@ public class PeopleSurvey {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	private String fullName;
-	private String fatherName;
+	private String full_name;
+	private String father_name;
 	private int family_head=0;
-	private String relationwithHO;
+	private String relation_with_ho;
 	private String sex;
 	private String dob;
-	private String adharNo;
-	private String cast;
+	private String adhar_no;
+	private String caste;
 	private String stipend;
-	private String scholarShip;
+	private String scholarship;
 	private String mobile;
-	private String sangsad;
-	private int facilityId;
+	private String created_date;
+	private String modified_date;
+	private String created_by;
+	private String modified_by;
+
+	private int facility_id;
 	
 	public int getId() {
 		return id;
 	}
-	public void setId(int surveyId) {
-		this.id = surveyId;
+	public void setId(int id) {
+		this.id = id;
 	}
-	public String getFullName() {
-		return fullName;
+	public String getFull_name() {
+		return full_name;
 	}
-	public void setFullName(String fullName) {
-		this.fullName = fullName;
+	public void setFull_name(String full_name) {
+		this.full_name = full_name;
 	}
-	public String getFatherName() {
-		return fatherName;
+	public String getFather_name() {
+		return father_name;
 	}
-	public void setFatherName(String fatherName) {
-		this.fatherName = fatherName;
+	public void setFather_name(String father_name) {
+		this.father_name = father_name;
 	}
-	public String getRelationwithHO() {
-		return relationwithHO;
+	public int getFamily_head() {
+		return family_head;
 	}
-	public void setRelationwithHO(String relationwithHO) {
-		this.relationwithHO = relationwithHO;
+	public void setFamily_head(int family_head) {
+		this.family_head = family_head;
+	}
+	public String getRelation_with_ho() {
+		return relation_with_ho;
+	}
+	public void setRelation_with_ho(String relation_with_ho) {
+		this.relation_with_ho = relation_with_ho;
 	}
 	public String getSex() {
 		return sex;
@@ -61,17 +73,17 @@ public class PeopleSurvey {
 	public void setDob(String dob) {
 		this.dob = dob;
 	}
-	public String getAdharNo() {
-		return adharNo;
+	public String getAdhar_no() {
+		return adhar_no;
 	}
-	public void setAdharNo(String adharNo) {
-		this.adharNo = adharNo;
+	public void setAdhar_no(String adhar_no) {
+		this.adhar_no = adhar_no;
 	}
-	public String getCast() {
-		return cast;
+	public String getCaste() {
+		return caste;
 	}
-	public void setCast(String cast) {
-		this.cast = cast;
+	public void setCaste(String caste) {
+		this.caste = caste;
 	}
 	public String getStipend() {
 		return stipend;
@@ -79,11 +91,11 @@ public class PeopleSurvey {
 	public void setStipend(String stipend) {
 		this.stipend = stipend;
 	}
-	public String getScholarShip() {
-		return scholarShip;
+	public String getScholarship() {
+		return scholarship;
 	}
-	public void setScholarShip(String scholarShip) {
-		this.scholarShip = scholarShip;
+	public void setScholarship(String scholarship) {
+		this.scholarship = scholarship;
 	}
 	public String getMobile() {
 		return mobile;
@@ -91,25 +103,38 @@ public class PeopleSurvey {
 	public void setMobile(String mobile) {
 		this.mobile = mobile;
 	}
-	public String getSangsad() {
-		return sangsad;
+	public int getFacility_id() {
+		return facility_id;
 	}
-	public void setSangsad(String sangsad) {
-		this.sangsad = sangsad;
+	public void setFacility_id(int facility_id) {
+		this.facility_id = facility_id;
 	}
-	public int getFacilityId() {
-		return facilityId;
+	public String getCreated_date() {
+		return created_date;
 	}
-	public void setFacilityId(int facilityId) {
-		this.facilityId = facilityId;
+	public void setCreated_date(String systemDate) {
+		this.created_date = systemDate;
 	}
-	public int getFamily_head() {
-		return family_head;
+	public String getModified_date() {
+		return modified_date;
 	}
-	public void setFamily_head(int family_head) {
-		this.family_head = family_head;
+	public void setModified_date(String modified_date) {
+		this.modified_date = modified_date;
 	}
-
+	public String getCreated_by() {
+		return created_by;
+	}
+	public void setCreated_by(String created_by) {
+		this.created_by = created_by;
+	}
+	public String getModified_by() {
+		return modified_by;
+	}
+	public void setModified_by(String modified_by) {
+		this.modified_by = modified_by;
+	}
+	
+	
 
 	
 }

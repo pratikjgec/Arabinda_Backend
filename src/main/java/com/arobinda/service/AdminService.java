@@ -1,6 +1,8 @@
 package com.arobinda.service;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,12 +20,17 @@ public class AdminService {
 	 @Autowired
 	 private PasswordEncoder passwordEncoder;
 
+	    SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");  
+	    Date date = new Date();  
+	    String systemDate=formatter.format(date); 
+	 
 	public String registerUser(Myuser user) {
 		
 		 if (adminRepo.findByUserName(user.getUserName()).isPresent()) {
 	            return "User is already exist";
 	       }
 		 user.setPassword(passwordEncoder.encode(user.getPassword()));
+		 user.setCreated_date(systemDate);
 		 adminRepo.save(user);
 		 
 		 return "User registered successfully";

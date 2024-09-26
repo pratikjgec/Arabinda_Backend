@@ -14,7 +14,6 @@ public class Otp {
 	private String otp;
 	
 	
-	
 	public String getMobile() {
 		return mobile;
 	}

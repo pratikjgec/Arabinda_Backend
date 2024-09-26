@@ -19,6 +19,10 @@ public class Myuser {
 	private String password;
 	private String role;
 	private int active=1;
+	private String created_date;
+	private String created_by;
+	
+	
 	public int getId() {
 		return id;
 	}
@@ -31,6 +35,8 @@ public class Myuser {
 	public void setFull_name(String full_name) {
 		this.full_name = full_name;
 	}
+
+
 	public String getUserName() {
 		return userName;
 	}
@@ -55,11 +61,20 @@ public class Myuser {
 	public void setActive(int active) {
 		this.active = active;
 	}
-	@Override
-	public String toString() {
-		return "Myuser [id=" + id + ", full_name=" + full_name + ", userName=" + userName + ", password=" + password
-				+ ", role=" + role + ", active=" + active + "]";
+	
+	public String getCreated_date() {
+		return created_date;
 	}
+	public void setCreated_date(String created_date) {
+		this.created_date = created_date;
+	}
+	public String getCreated_by() {
+		return created_by;
+	}
+	public void setCreated_by(String created_by) {
+		this.created_by = created_by;
+	}
+
 	
 	
 	

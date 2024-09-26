@@ -21,6 +21,7 @@ public class Complain {
 	private String status;
 	private String complain_id;
 	private String otp;
+	private String created_date;
 	
 	public int getId() {
 		return id;
@@ -79,6 +80,12 @@ public class Complain {
 	}
 	public void setOtp(String otp) {
 		this.otp = otp;
+	}
+	public String getCreated_date() {
+		return created_date;
+	}
+	public void setCreated_date(String created_date) {
+		this.created_date = created_date;
 	}
 
 	

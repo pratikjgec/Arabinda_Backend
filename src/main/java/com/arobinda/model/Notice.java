@@ -12,8 +12,9 @@ public class Notice {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	private String notice;
-	private String issueDate;
-	private int isActive=1;
+	private String issue_date;
+	private int is_active=1;
+	private String created_date;
 	
 	public int getId() {
 		return id;
@@ -27,18 +28,25 @@ public class Notice {
 	public void setNotice(String notice) {
 		this.notice = notice;
 	}
-	public String getIssueDate() {
-		return issueDate;
+	public String getIssue_date() {
+		return issue_date;
 	}
-	public void setIssueDate(String issueDate) {
-		this.issueDate = issueDate;
+	public void setIssue_date(String issue_date) {
+		this.issue_date = issue_date;
 	}
-	public int getIsActive() {
-		return isActive;
+	public int getIs_active() {
+		return is_active;
 	}
-	public void setIsActive(int isActive) {
-		this.isActive = isActive;
+	public void setIs_active(int is_active) {
+		this.is_active = is_active;
 	}
+	public String getCreated_date() {
+		return created_date;
+	}
+	public void setCreated_date(String created_date) {
+		this.created_date = created_date;
+	}
+
 	
 	
 	

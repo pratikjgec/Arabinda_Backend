@@ -5,6 +5,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
+
 @Entity
 public class Facility {
 	
@@ -14,60 +15,92 @@ public class Facility {
 	private String sansad;
 	private String houseNo;
 	private String surveyor;
-	private String createdDate;
+	private String created_date;
 	private String remarks;
-	private String jobCardNo;
-	private String incomeSource;
-	private String landMode;
-	private String ifAnyRent;
+	private String job_card_no;
+	private String income_source;
+	private String land_mode;
+	private String if_any_rent;
 	private String cattle;
 	private String house;
 	private String pmy;
-	private String  vehicle;
-	private String waterSource;
+	private String vehicle;
+	private String water_source;
 	private String phe;
 	private String toilet;
 	private String gas;
 	private String electric;
 	private String tax;
-	private String  ssy;
-	private String retion;
-	private String sasthaSathi;
+	private String ssy;
+	private String ration;
+	private String sastha_sathi;
 	private String shg;
-	private String newVoter;
+	private String new_voter;
 	private String ks_cc;
-	
+	private String modified_date;
+	private String created_by;
+	private String modified_by;
 	
 	
 	public int getId() {
 		return id;
 	}
-	public void setPeopleId(int id) {
+	public void setId(int id) {
 		this.id = id;
 	}
-	public String getJobCardNo() {
-		return jobCardNo;
+	public String getSansad() {
+		return sansad;
 	}
-	public void setJobCardNo(String jobCardNo) {
-		this.jobCardNo = jobCardNo;
+	public void setSansad(String sansad) {
+		this.sansad = sansad;
 	}
-	public String getIncomeSource() {
-		return incomeSource;
+	public String getHouseNo() {
+		return houseNo;
 	}
-	public void setIncomeSource(String incomeSource) {
-		this.incomeSource = incomeSource;
+	public void setHouseNo(String houseNo) {
+		this.houseNo = houseNo;
 	}
-	public String getLandMode() {
-		return landMode;
+	public String getSurveyor() {
+		return surveyor;
 	}
-	public void setLandMode(String landMode) {
-		this.landMode = landMode;
+	public void setSurveyor(String surveyor) {
+		this.surveyor = surveyor;
 	}
-	public String getIfAnyRent() {
-		return ifAnyRent;
+	public String getCreated_date() {
+		return created_date;
 	}
-	public void setIfAnyRent(String ifAnyRent) {
-		this.ifAnyRent = ifAnyRent;
+	public void setCreated_date(String created_date) {
+		this.created_date = created_date;
+	}
+	public String getRemarks() {
+		return remarks;
+	}
+	public void setRemarks(String remarks) {
+		this.remarks = remarks;
+	}
+	public String getJob_card_no() {
+		return job_card_no;
+	}
+	public void setJob_card_no(String job_card_no) {
+		this.job_card_no = job_card_no;
+	}
+	public String getIncome_source() {
+		return income_source;
+	}
+	public void setIncome_source(String income_source) {
+		this.income_source = income_source;
+	}
+	public String getLand_mode() {
+		return land_mode;
+	}
+	public void setLand_mode(String land_mode) {
+		this.land_mode = land_mode;
+	}
+	public String getIf_any_rent() {
+		return if_any_rent;
+	}
+	public void setIf_any_rent(String if_any_rent) {
+		this.if_any_rent = if_any_rent;
 	}
 	public String getCattle() {
 		return cattle;
@@ -93,11 +126,11 @@ public class Facility {
 	public void setVehicle(String vehicle) {
 		this.vehicle = vehicle;
 	}
-	public String getWaterSource() {
-		return waterSource;
+	public String getWater_source() {
+		return water_source;
 	}
-	public void setWaterSource(String waterSource) {
-		this.waterSource = waterSource;
+	public void setWater_source(String water_source) {
+		this.water_source = water_source;
 	}
 	public String getPhe() {
 		return phe;
@@ -135,17 +168,17 @@ public class Facility {
 	public void setSsy(String ssy) {
 		this.ssy = ssy;
 	}
-	public String getRetion() {
-		return retion;
+	public String getRation() {
+		return ration;
 	}
-	public void setRetion(String retion) {
-		this.retion = retion;
+	public void setRation(String ration) {
+		this.ration = ration;
 	}
-	public String getSasthaSathi() {
-		return sasthaSathi;
+	public String getSastha_sathi() {
+		return sastha_sathi;
 	}
-	public void setSasthaSathi(String sasthaSathi) {
-		this.sasthaSathi = sasthaSathi;
+	public void setSastha_sathi(String sastha_sathi) {
+		this.sastha_sathi = sastha_sathi;
 	}
 	public String getShg() {
 		return shg;
@@ -153,11 +186,11 @@ public class Facility {
 	public void setShg(String shg) {
 		this.shg = shg;
 	}
-	public String getNewVoter() {
-		return newVoter;
+	public String getNew_voter() {
+		return new_voter;
 	}
-	public void setNewVoter(String newVoter) {
-		this.newVoter = newVoter;
+	public void setNew_voter(String new_voter) {
+		this.new_voter = new_voter;
 	}
 	public String getKs_cc() {
 		return ks_cc;
@@ -165,38 +198,24 @@ public class Facility {
 	public void setKs_cc(String ks_cc) {
 		this.ks_cc = ks_cc;
 	}
-	public String getSansad() {
-		return sansad;
+	public String getModified_date() {
+		return modified_date;
 	}
-	public void setSansad(String sansad) {
-		this.sansad = sansad;
+	public void setModified_date(String modified_date) {
+		this.modified_date = modified_date;
 	}
-	public String getHouseNo() {
-		return houseNo;
+	public String getCreated_by() {
+		return created_by;
 	}
-	public void setHouseNo(String houseNo) {
-		this.houseNo = houseNo;
+	public void setCreated_by(String created_by) {
+		this.created_by = created_by;
 	}
-	public String getSurveyor() {
-		return surveyor;
+	public String getModified_by() {
+		return modified_by;
 	}
-	public void setSurveyor(String surveyor) {
-		this.surveyor = surveyor;
+	public void setModified_by(String modified_by) {
+		this.modified_by = modified_by;
 	}
-	public String getCreatedDate() {
-		return createdDate;
-	}
-	public void setCreatedDate(String createdDate) {
-		this.createdDate = createdDate;
-	}
-	public String getRemarks() {
-		return remarks;
-	}
-	public void setRemarks(String remarks) {
-		this.remarks = remarks;
-	}
-	
-	
 	
 
 }
