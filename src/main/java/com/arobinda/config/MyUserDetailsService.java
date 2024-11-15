@@ -25,13 +25,14 @@ public class MyUserDetailsService implements UserDetailsService{
 		
 		Optional<Myuser> user=repository.findByUserName(username);
 		
-		if(user.isPresent()) {
+		if(user.isPresent() && user.get().getActive()==1) {
 			return User.builder()
 					.username(user.get().getUserName())
 					.password(user.get().getPassword())
 					.roles(user.get().getRole())
 					.build();
-		}else {
+		}		
+		else {
 			throw new UsernameNotFoundException(username);
 		}
 	}

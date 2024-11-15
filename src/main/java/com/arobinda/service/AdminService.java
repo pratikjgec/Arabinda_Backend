@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.TimeZone;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,9 +22,12 @@ public class AdminService {
 	 @Autowired
 	 private PasswordEncoder passwordEncoder;
 
-	    SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");  
-	    Date date = new Date();  
-	    String systemDate=formatter.format(date); 
+		String systemDate() {
+		    SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");  
+		    Date date = new Date();  
+		    formatter.setTimeZone(TimeZone.getTimeZone("IST"));
+		    return formatter.format(date); 
+			}
 	 
 	public String registerUser(Myuser user) {
 		
@@ -30,7 +35,7 @@ public class AdminService {
 	            return "User is already exist";
 	       }
 		 user.setPassword(passwordEncoder.encode(user.getPassword()));
-		 user.setCreated_date(systemDate);
+		 user.setCreated_date(systemDate());
 		 adminRepo.save(user);
 		 
 		 return "User registered successfully";
@@ -55,5 +60,26 @@ public class AdminService {
         }
 	    return ResponseEntity.badRequest().body("Incorrect UserName/Password !!");
 		
+	}
+
+	public String activeInactiveUser(Myuser userDetails) {
+		
+		Optional<Myuser> user=adminRepo.findById(userDetails.getId());
+		String msg="";
+		if(user.isPresent()) {
+			if(userDetails.getStatus().equalsIgnoreCase("active")) {
+				user.get().setActive(1);
+				msg= "User Activated Successfully...!!!";
+			}
+			else {
+				user.get().setActive(0);
+				msg= "User Inactive Successfully...!!!";
+			}
+			user.get().setInActive_by(userDetails.getInActive_by());
+			user.get().setInActive_date(systemDate());
+			adminRepo.save(user.get());
+			return msg;
+		}
+		return "No Valid User found..!!";
 	}
 }

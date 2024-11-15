@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.TimeZone;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -58,10 +59,12 @@ public class UserService {
 	private String  API_KEY;
 
 
-
+	String systemDate() {
     SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");  
     Date date = new Date();  
-    String systemDate=formatter.format(date); 
+    formatter.setTimeZone(TimeZone.getTimeZone("IST"));
+    return formatter.format(date); 
+	}
 	
 	public ResponseEntity<?> complainRegister(Complain complain) throws IOException {
 	
@@ -84,7 +87,7 @@ public class UserService {
 				 SecureRandom secureRandom = new SecureRandom();
 			     int complainId = 1000 + secureRandom.nextInt(9000);
 			     complain.setComplain_id(String.valueOf(complainId));
-			     complain.setCreated_date(systemDate);
+			     complain.setCreated_date(systemDate());
 				 userRepo.save(complain);
 				 otpRepo.delete(otpDetails.get());
 				 
@@ -92,6 +95,7 @@ public class UserService {
 				 response.put("status", "success");
 				 response.put("message", "Complain Id-"+complainId+" Complain registered successfully!!!");
 			//	 response.put("sms_response", smsResp);
+				 smsSend(complain.getMobile(),complainId,"ComplainRegistered");
 				 return new ResponseEntity<>(response,HttpStatus.OK);
 			 }
 		}
@@ -102,16 +106,14 @@ public class UserService {
 		 }
 	}
 
-
-
 	public List<Complain> getAllcomplain() {
 		
 		return userRepo.findAll();
 	}
 	
-	public Optional<Complain> getComplainByComplainId(String complainId) {
+	public Optional<Complain> getComplainByComplainId(Complain complain) {
 		
-		Optional<Complain> complainDetails=userRepo.findByComplainId(complainId);
+		Optional<Complain> complainDetails=userRepo.findBycomplainIdAndMobile(complain.getComplain_id(),complain.getMobile());
 		
 	    if(complainDetails.isPresent()) {
 	    	
@@ -119,25 +121,27 @@ public class UserService {
         }
 	    return null;
 	}
-
+	
+	
 	public ResponseEntity<?> markComplainResolved(Complain complain) throws IOException {
 		Map<String, Object> response = new HashMap<>();
-		Optional<Complain> complainDetails=userRepo.findByMobile(complain.getMobile());
-		String complainId=complain.getComplain_id();
+		Optional<Complain> complainDetails=userRepo.findUnresolvedBycomplainId(complain.getComplain_id());
+		
 		 if (complainDetails!=null) {
 			 
 			 Complain complainData=complainDetails.get();
-			 complainData.setStatus(complain.getStatus());
+			 complainData.setStatus("Resolved");
+			 complainData.setResolved_date(systemDate());
+			 complainData.setResolved_by(complain.getResolved_by());
 			 userRepo.save(complainData);
-		//	 String smsResp=smsSend(complain.getMobile(),complainId,"ComplainResolved");
 			 response.put("status", "success");
-			 response.put("message", "Complain Id-"+complainId+" resolved successfully!!!");
-		//	 response.put("sms_response", smsResp);
+			 response.put("message", "Complain Id-"+complain.getComplain_id()+" resolved successfully!!!");
+			 smsSend(complainData.getMobile(),Integer.parseInt(complain.getComplain_id()),"ComplainResolved");
 			 return new ResponseEntity<>(response,HttpStatus.OK);
 			 
 		 }
 		 response.put("status", "failed");
-		 response.put("message", "Complain Id-"+complainId+" not found!!");
+		 response.put("message", "Complain Id-"+complain.getComplain_id()+" not found!!");
 		 
 		 return new ResponseEntity<>(response,HttpStatus.NOT_FOUND);
 	}
@@ -145,7 +149,7 @@ public class UserService {
 	public String noticeSubmit(Notice notice) {
 		
 		if (!notice.getNotice().isEmpty()) {
-			notice.setCreated_date(systemDate);
+			notice.setCreated_date(systemDate());
 			noticeRepo.save(notice);
 		}
 		 return "Notice Uploaded successfully";
@@ -153,17 +157,17 @@ public class UserService {
 
 	public List<Notice> getNotice() {
 		
-		List<Notice> notices=noticeRepo.findAll();
+		List<Notice> notices=noticeRepo.findAllActiveNotice();
 		
 		return notices;
 	}
 
-	public String markNoticeInactive(Notice notice) {
+	public String markNoticeInactive(int id) {
 		
-		Optional<Notice> noticeDetails=noticeRepo.findById(notice.getId());
+		Optional<Notice> noticeDetails=noticeRepo.findById(id);
 		if(noticeDetails!=null) {
-			notice.setIs_active(0);
-			 noticeRepo.save(notice);
+			noticeDetails.get().setIs_active(0);
+			 noticeRepo.save(noticeDetails.get());
 			return "Notice Mark in-acitive successfully";
 		}
 		return  "No Notice Found, notice id may incorrect";
@@ -184,7 +188,7 @@ public class UserService {
 		}
 
 	public List<Content> getAboutUs() {
-		
+		systemDate();
 		return contentRepo.findAll();
 	}
 
@@ -238,8 +242,8 @@ public class UserService {
 	public String surveyRegister(SurveyData surveyData) throws Exception {
 		
 		
-		surveyData.getFacility().setCreated_date(systemDate);
-		surveyData.getFacility().setModified_date(systemDate);
+		surveyData.getFacility().setCreated_date(systemDate());
+		surveyData.getFacility().setModified_date(systemDate());
 		Facility facility=facilityRepo.save(surveyData.getFacility());
 	//	Facility facility=facilityRepo.save(null);
 		
@@ -247,8 +251,8 @@ public class UserService {
 		
 		for (PeopleSurvey person : peopleList) {
 			
-			person.setCreated_date(systemDate);
-			person.setModified_date(systemDate);
+			person.setCreated_date(systemDate());
+			person.setModified_date(systemDate());
 			person.setFacility_id(facility.getId());
 		}
 
@@ -273,66 +277,44 @@ public class UserService {
 		return surveyData;
 	}
 	
-	@SuppressWarnings("deprecation")
-	private  String smsSend(String mobile, int complainId, String type) throws IOException {
+	private  String smsSend(String mobile, int complainId, String smsType)  {
 		
-		OkHttpClient client = new OkHttpClient();
-		String SENDER_ID="DLT_SENDER_ID";
-		RequestBody body=null;
+		String SENDER_ID="NSCOP";
+		String route="dlt";
 		String SMS_URL = "https://www.fast2sms.com/dev/bulkV2";
-		String API_KEY_NEW="";
-		String name="Potu";
-		int full=15000;
-		int due=13000;
-		int paid=2000;
+		String url="";
 		
 		RestTemplate restTemplate = new RestTemplate();
-		if(type.equalsIgnoreCase("ComplainRegister")) {
-//			String message="12345"; // Registered template ID as per fast2sms
-//	        MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");
-//	         body = RequestBody.create(mediaType, 
-//	            "sender_id=" + SENDER_ID + 
-//	            "&message=" + message + 
-//	            "&language=english&route=p&numbers=" + mobile);
-			 String variablesValues = String.format("%s|%s|%s|%s", name, paid, full, due);
-			 String url = SMS_URL+ "?authorization=" + API_KEY_NEW
-			            + "&route=dlt" 
-			            + "&sender_id=nabrun"
-			            + "&message=173080"
+		if(smsType.equalsIgnoreCase("ComplainRegistered")) {
+			
+			//message id is as per fast2sms portal
+			String massageId="175449";
+			 String variablesValues = String.format("%s", complainId);
+			 url = SMS_URL+ "?authorization=" + API_KEY
+			            + "&route="+route 
+			            + "&sender_id="+SENDER_ID
+			            + "&message="+massageId
 			            + "&variables_values="+variablesValues
 			            + "&numbers="+mobile
 			            + "&flash=0";
-			 
-			
-			 ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
-
-		        // Return the response from the API
-		        return response.getBody();
-			
 		}
 		
-		if(type.equalsIgnoreCase("ComplainResolved")) {
-			String message="12345"; // Registered template ID as per fast2sms
-	        MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");
-	         body = RequestBody.create(mediaType, 
-	            "sender_id=" + SENDER_ID + 
-	            "&message=" + message + 
-	            "&language=english&route=p&numbers=" + mobile);
+		if(smsType.equalsIgnoreCase("ComplainResolved")) {
+			
+			//message id is as per fast2sms portal
+			String massageId="175448";
+			String variablesValues = String.format("%s", complainId);
+			 url = SMS_URL+ "?authorization=" + API_KEY
+			            + "&route="+route 
+			            + "&sender_id="+SENDER_ID
+			            + "&message="+massageId
+			            + "&variables_values="+variablesValues
+			            + "&numbers="+mobile
+			            + "&flash=0";
 		}
+		ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
+		return response.getBody();
 
-
-
-	     Request request = new Request.Builder()
-	             .url("https://www.fast2sms.com/dev/bulkV2")
-	             .post(body)
-	             .addHeader("authorization", API_KEY)
-	             .addHeader("cache-control", "no-cache")
-	             .addHeader("content-type", "application/x-www-form-urlencoded")
-	             .build();
-	     Response response = client.newCall(request).execute();
-	     
-	     return(response.body().string());
-		
 	}
 
 	public String generateOTP(Complain complain) {
@@ -363,11 +345,26 @@ public class UserService {
 			   Otp otp=new Otp();
 		       otp.setMobile(recipent);
 		       otp.setOtp(String.valueOf(randomOTPNo));
-		       System.out.println(otp.getOtp());
-		       System.out.println(otp.getMobile());
 		       otpRepo.save(otp);
 		       
 		return response.getBody();
 
+	}
+
+	public Complain complainRemarksUpdate(Complain complain) {
+		
+	 
+		Optional<Complain> complainDetails=userRepo.findBycomplainId(Integer.parseInt(complain.getComplain_id()));
+		
+		//	String complainId=complainDetails.get().getComplain_id();
+			
+			 if (complainDetails!=null) {
+				 
+				 Complain complainData=complainDetails.get();
+				 complainData.setRemarks(complain.getRemarks());
+				  return userRepo.save(complainData);
+				 
+			 }
+			return null;
 	}
 }

@@ -55,22 +55,7 @@ public class UserController {
        
     }
    
-    @PostMapping("/getAllcomplain")
-    public ResponseEntity<?> getAllcomplain() {
-           
-    	Map<String, Object> response = new HashMap<>();
-        response.put("status", "success");
-        response.put("data", userService.getAllcomplain());
-        return new ResponseEntity<>(response, HttpStatus.OK);
-         
-    }
+
     
-    @PutMapping("/complainResolved")
-    public ResponseEntity<?> markComplainResolved(@RequestBody Complain complain) throws IOException {
-      
-    	Map<String, Object> response = new HashMap<>();
-        response.put("status", "success");
-        response.put("message", userService.markComplainResolved(complain));
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
+   
 }

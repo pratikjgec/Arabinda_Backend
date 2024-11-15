@@ -22,6 +22,10 @@ public class Complain {
 	private String complain_id;
 	private String otp;
 	private String created_date;
+	private String remarks;
+	private String category;
+	private String resolved_by;
+	private String resolved_date;
 	
 	public int getId() {
 		return id;
@@ -47,9 +51,6 @@ public class Complain {
 	public void setMobile(String mobile) {
 		this.mobile = mobile;
 	}
-
-	
-	
 	
 	public String getComplain_id() {
 		return complain_id;
@@ -86,6 +87,30 @@ public class Complain {
 	}
 	public void setCreated_date(String created_date) {
 		this.created_date = created_date;
+	}
+	public String getRemarks() {
+		return remarks;
+	}
+	public void setRemarks(String remarks) {
+		this.remarks = remarks;
+	}
+	public String getCategory() {
+		return category;
+	}
+	public void setCategory(String category) {
+		this.category = category;
+	}
+	public String getResolved_by() {
+		return resolved_by;
+	}
+	public void setResolved_by(String resolved_by) {
+		this.resolved_by = resolved_by;
+	}
+	public String getResolved_date() {
+		return resolved_date;
+	}
+	public void setResolved_date(String resolved_date) {
+		this.resolved_date = resolved_date;
 	}
 
 	

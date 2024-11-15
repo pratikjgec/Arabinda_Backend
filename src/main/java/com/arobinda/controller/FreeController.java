@@ -68,7 +68,7 @@ public class FreeController {
     @PostMapping("/getComplainByComplainId")
     public ResponseEntity<?> getComplainByComplainId(@RequestBody Complain complain) {
            
-    	Optional<Complain> userComplain=userService.getComplainByComplainId(complain.getComplain_id());
+    	Optional<Complain> userComplain=userService.getComplainByComplainId(complain);
     	Map<String, Object> response = new HashMap<>();
     	if(userComplain!=null) {
 	        response.put("status", "success");
@@ -77,7 +77,7 @@ public class FreeController {
     	}
     	else {
     		 response.put("status", "failed");
- 	        response.put("message", "Complain id-"+complain.getComplain_id() +" no active complain found..");
+ 	        response.put("message", "No complain found, Mobile/Complain-ID Missmatch..!!!");
  	        return new ResponseEntity<>(response, HttpStatus.OK);
     	}
              
@@ -107,21 +107,17 @@ public class FreeController {
 	                response.put("role",user.get().getRole() );
 	                response.put("token", token);
 	                return new ResponseEntity<>(response, HttpStatus.OK);
-	            
-	        } else {
-	        
-	            Map<String, Object> response = new HashMap<>();
-                response.put("status", "failed");
-                response.put("message", "Invalid Username/Password!!!");
-                return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
-	        }
+	        }    
+
     	}
+
     	catch (AuthenticationException e) {
             Map<String, Object> response = new HashMap<>();
             response.put("status", "failed");
-            response.put("message", "Invalid Username/Password!!!");
+            response.put("message", "Bad Credentials or In-Active User, Please Conatct with your Admin");
             return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
         }
+		return null;
     }
     
 }

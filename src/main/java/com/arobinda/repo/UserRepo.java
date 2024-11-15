@@ -21,8 +21,14 @@ public interface UserRepo extends JpaRepository<Complain, Integer>{
 
 	List<Complain> findByStatus(String status);
 
+	@Query(value = "SELECT * FROM complain where complain_id=:complainId", nativeQuery = true)
+	Optional<Complain> findBycomplainId(int complainId);
+	
+	@Query(value = "SELECT * FROM complain where complain_id=:complainId and mobile=:mobile", nativeQuery = true)
+	Optional<Complain> findBycomplainIdAndMobile(String complainId,String mobile);
+
 	@Query(value = "SELECT * FROM complain where complain_id=:complainId and status='unresolved'", nativeQuery = true)
-	Optional<Complain> findByComplainId(String complainId);
+	Optional<Complain> findUnresolvedBycomplainId(String complainId);
 
 	
 }

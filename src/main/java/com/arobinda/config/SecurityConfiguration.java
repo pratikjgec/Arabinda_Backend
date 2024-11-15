@@ -46,6 +46,7 @@ public class SecurityConfiguration {
                 registry.requestMatchers("/authenticate","/home","/complain","/health","/generateOTP","/complainRegister","/getAboutUs","/getNotice","/getComplainByComplainId").permitAll();
                 registry.requestMatchers("/admin/**").hasRole("ADMIN");
                 registry.requestMatchers("/user/**").hasRole("USER");
+                registry.requestMatchers("/executive/**").hasAnyRole("EXECUTIVE", "ADMIN");
                 registry.anyRequest().authenticated();
             })
             .formLogin(AbstractAuthenticationFilterConfigurer::disable)

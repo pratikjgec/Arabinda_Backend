@@ -63,6 +63,15 @@ public class AdminController {
 	          response.put("message", adminService.getUsers());
 	          return new ResponseEntity<>(response, HttpStatus.OK);
 	    }
+	    
+	    @PostMapping("/activeInactiveUser")
+	    public ResponseEntity<?> activeInactiveUser(@RequestBody Myuser userDetails) {
+	           
+	    	Map<String, Object> response = new HashMap<>();
+	          response.put("status", "success");
+	          response.put("message", adminService.activeInactiveUser(userDetails));
+	          return new ResponseEntity<>(response, HttpStatus.OK);
+	    }
    
 
 	// compress the image bytes before storing it in the database
@@ -125,12 +134,12 @@ public class AdminController {
             
     }
     
-    @PutMapping("/noticeInactive")
-    public ResponseEntity<?> markNoticeInactive(@RequestBody Notice notice) {
+    @PutMapping("/noticeInactive/{id}")
+    public ResponseEntity<?> markNoticeInactive(@PathVariable int id) {
       
     	Map<String, Object> response = new HashMap<>();
         response.put("status", "success");
-        response.put("message", userService.markNoticeInactive(notice));
+        response.put("message", userService.markNoticeInactive(id));
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
     
@@ -142,4 +151,6 @@ public class AdminController {
         response.put("message", userService.noticeSubmit(notice));
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+    
+    
 }

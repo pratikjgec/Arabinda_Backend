@@ -21,6 +21,9 @@ public class Myuser {
 	private int active=1;
 	private String created_date;
 	private String created_by;
+	private String inActive_by;
+	private String inActive_date;
+	private String status;
 	
 	
 	public int getId() {
@@ -73,6 +76,24 @@ public class Myuser {
 	}
 	public void setCreated_by(String created_by) {
 		this.created_by = created_by;
+	}
+	public String getInActive_by() {
+		return inActive_by;
+	}
+	public void setInActive_by(String inActive_by) {
+		this.inActive_by = inActive_by;
+	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
+	}
+	public String getInActive_date() {
+		return inActive_date;
+	}
+	public void setInActive_date(String inActive_date) {
+		this.inActive_date = inActive_date;
 	}
 
 	
